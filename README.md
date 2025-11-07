@@ -1,74 +1,106 @@
 # EEG-Visual-Decoding-Decoding-Object-Recognition-Dynamics-with-MVPA-and-RSA
 
-Overview
+📘 Overview
 
-This repository documents an advanced cognitive neuroscience project focused on analyzing Electroencephalography (EEG) data to decode the neural dynamics of visual object recognition, specifically distinguishing between face and dollhouse stimuli. The analysis employs a comprehensive multi-method approach, including traditional event-related potentials (ERP), time-frequency analysis, and state-of-the-art machine learning techniques like Multivariate Pattern Analysis (MVPA) and Representational Similarity Analysis (RSA) with deep neural network models (CORnet-S).
+The project investigates non-invasive electrophysiological recordings obtained from the scalp during a rapid visual processing task.
+By analyzing time-domain (ERP), frequency-domain (TFA), and multivariate patterns (MVPA/RSA), the goal is to understand how the ventral visual stream encodes object categories and how this neural activity relates to the hierarchical features learned by deep neural networks like CORnet-S.
 
-The goal is to provide insights into when and where visual category information emerges in the brain, and how these neural representations relate to computational models of the ventral visual stream.
+This repository includes:
 
-Experimental Paradigm
+End-to-end EEG preprocessing (filtering, artifact correction, epoching).
 
-The data originates from a Rapid Serial Visual Presentation (RSVP) experiment:
+ERP analysis with statistical comparison (cluster-based permutation tests).
 
-Stimuli: 18 images across two categories: faces (marked by trigger 496) and dollhouses (marked by trigger 436).
+Time-Frequency Analysis (TFA) to characterize neural oscillations.
 
-Presentation: Each stimulus was presented for 100 ms with a 200 ms Inter-Stimulus Interval (ISI).
+Multivariate Pattern Analysis (MVPA) for time-resolved and spatial decoding.
 
-EEG Acquisition: 64-channel EEG (10-10 system), sampled at 1000 Hz. Reference electrode: Fz.
+Representational Similarity Analysis (RSA) to link EEG dynamics to CNN visual layers (V1, V2, V4, IT).
 
-Core Analysis Methods
+Experimental Paradigm and Data Description
 
-The project utilizes five primary analytical modules to explore the data:
+The analysis uses data recorded during a Rapid Serial Visual Presentation (RSVP) experiment.
 
-1. Preprocessing and Data Preparation
+Electrophysiological Data: 64-channel EEG (10-10 system).
 
-All raw EEG data must undergo a rigorous preprocessing pipeline before advanced analysis.
+Sampling Rate: 1000 Hz.
 
-Epoching: Data is segmented (epoched) around stimulus onset, typically from -500 ms to +1500 ms.
+Stimuli: 18 images across two categories: Faces (Trigger 496) and Dollhouses (Trigger 436).
 
-Filtering: Application of online or offline filters (e.g., 0.1 Hz high-pass and 100 Hz low-pass) to remove drift and high-frequency noise.
+Epoching: Extracted time windows from -500 ms to +1500 ms relative to stimulus onset.
 
-Artifact Correction: Steps such as Independent Component Analysis (ICA) are applied to identify and remove artifacts (e.g., eye blinks, muscle movements).
+Presentation Details: 100 ms duration per stimulus with a 200 ms Inter-Stimulus Interval (ISI).
 
-Baseline Correction: Correction applied to normalize the signal based on the pre-stimulus period.
+Reference: Fz electrode used as the online reference.
 
-2. Event-Related Potentials (ERP) Analysis
+⚙️ Pipeline Overview
 
-The ERP analysis module focuses on the average temporal waveform evoked by the two categories.
+The repository is structured into modular stages, designed for a complete analysis of the EEG data.
 
-Plotting: Generation of grand-average ERP plots for face vs. dollhouse stimuli.
+1️⃣ Signal Preprocessing and Artifact Correction
 
-Statistics: Execution of statistical comparisons (e.g., permutation tests or cluster-based statistics) to identify and interpret time points and electrodes showing significant differences between the two conditions.
+Objective:
+Prepare raw EEG signals for reliable statistical and multivariate analysis.
+Steps:
+Filtering
+Apply required online or offline filters (e.g., 0.1 Hz high-pass and 100 Hz low-pass) to remove drift and line noise.
+Epoching and Baseline Correction
+Segment continuous data into trials (epochs) from -500 ms to +1500 ms.
+Apply baseline correction using the pre-stimulus period.
+Artifact Correction (ICA)
+Use Independent Component Analysis (ICA) to identify and remove ocular (EOG) and muscular (EMG) artifacts.
+Bad Channel Interpolation
+Identify and interpolate noisy or flat channels if necessary.
 
-3. Time-Frequency Analysis (TFA)
+2️⃣ Event-Related Potential (ERP) Analysis
 
-This method explores oscillatory activity in the EEG signal, analyzing how power changes across different frequency bands over time.
+Objective:
+Quantify the average time-locked neural response and identify significant differences between categories.
+Steps:
+ERP Plotting
+Compute and plot grand-average ERPs for Face vs. Dollhouse stimuli across key scalp regions.
+Statistical Comparison
+Conduct statistical tests (e.g., cluster-based permutation tests) to highlight time periods and electrodes with significant categorical differences.
 
-Transformation: Use of methods like wavelet or short-time Fourier transforms to generate time-frequency maps.
+3️⃣ Time-Frequency Analysis (TFA)
 
-Comparison: Categorical comparison of time-frequency maps to discuss the role of different neural oscillations (e.g., alpha, beta, gamma) in perception and recognition.
+Objective:
+Analyze power changes across different frequency bands (oscillations) over time.
+Steps:
+Time-Frequency Transformation
+Use wavelet or short-time Fourier transforms to compute power maps (Time x Frequency) for each category.
+Comparison and Interpretation
+Compare TFA maps across faces and dollhouses. Discuss observed effects in context of established neural oscillations (e.g., alpha, beta, gamma) and their role in perception.
 
-4. Multivariate Pattern Analysis (MVPA)
+4️⃣ Multivariate Pattern Analysis (MVPA)
 
-MVPA uses machine learning classifiers to decode stimulus category from the spatio-temporal patterns of EEG activity. This allows for detection of subtle, distributed information often missed by ERP analysis.
+Objective:
+Decode stimulus category from the full spatio-temporal pattern of EEG activity using machine learning.
+Steps:
+Temporal MVPA
+Train and test an SVM/classifier at each individual time point across all channels to map the dynamic onset and duration of decoding accuracy.
+Spatial MVPA
+Train a classifier using electrode patterns, often aggregated over specific time windows (e.g., P1, N170, P300).
+Cross-Temporal Generalization (Optional)
+Train at time $t_1$ and test at time $t_2$ to assess the stability and evolution of the neural code over time.
 
-Temporal MVPA: Classifier trained at each time point across all channels to map the temporal dynamics of information emergence.
+5️⃣ Representational Dissimilarity Matrix (RDM) and RSA
 
-Spatial MVPA: Classifier trained across the spatial pattern of electrodes, often aggregated over a specific time window.
+Objective:
+Compare the structure of the neural representation geometry with theoretical and computational models.
+Steps:
+RDM Construction
+Compute the Representational Dissimilarity Matrix (RDM) by calculating the dissimilarity (e.g., 1 minus correlation) between the multi-channel EEG patterns for every pair of stimuli.
+Representational Similarity Analysis (RSA)
+Correlate the time-resolved EEG RDMs with model RDMs derived from features of different visual layers of the CORnet-S deep neural network (V1, V2, V4, IT).
+Interpretation
+Determine which DNN layers best predict the human EEG representation structure over time, linking neural dynamics to hierarchical visual processing.
 
-Cross-Temporal Generalization (Optional): Training the classifier at one time point and testing its performance at all other time points to reveal the temporal stability of the neural code.
+🧮 Tools and Dependencies
 
-5. Representational Dissimilarity Matrix (RDM) and RSA
-
-This module compares the neural representation structure to external models, specifically Deep Neural Networks (DNNs).
-
-RDM Computation: Calculation of the Representational Dissimilarity Matrix (RDM) by computing the dissimilarity (e.g., 1 - correlation) between activation patterns for all stimulus pairs across time and/or channels.
-
-Representational Similarity Analysis (RSA): Comparison (correlation) between the EEG-derived RDMs and model-derived RDMs (e.g., from different visual layers of the CORnet-S model, like V1, V2, V4, and IT).
-
-Interpretation: Determining which visual layers of the CORnet-S model best correlate with the observed EEG dynamics, thus linking the temporal evolution of brain activity to the hierarchical structure of the ventral visual pathway.
+Python: MNE (for core EEG processing), scikit-learn (for MVPA classification), numpy, scipy, matplotlib/seaborn (for visualization). Specialized toolboxes may be used for RSA and time-frequency analysis.
 
 📜 License
 
 This repository is provided for research and academic use.
-Please acknowledge this work appropriately if it informs your analyses
+Please acknowledge this work appropriately if it informs your analyses.
