@@ -132,7 +132,7 @@ Relate EEG representational structure to computational models of vision.
 ---
 
 ## 🧮 Tools and Dependencies
-
+- **EEG:** `EEGLAB`
 - **Python:** `mne`, `numpy`, `scipy`, `scikit-learn`, `matplotlib`, `seaborn`, `pandas`  
 - **Machine Learning:** `scikit-learn` for SVM-based decoding  
 - **Visualization:** Matplotlib / Seaborn for ERP, TFA, and decoding plots  
@@ -149,15 +149,6 @@ Relate EEG representational structure to computational models of vision.
 
 ---
 
-## 🔗 Resources
-
-- **EEG Dataset Description (Experimental Details):**  
-  [📄 View PDF](https://bcolabcourses.github.io/ICNSpring2025/static_files/assignments/HW3_EEGDecoding.pdf)
-
-- **Primary Data File:**  
-  [📈 Download EEG Data](https://bcolabcourses.github.io/ICNSpring2025/static_files/assignments/eeg_data.mat)
-
----
 
 ## 📜 License
 
